@@ -1,0 +1,20 @@
+{% extends 'main_page.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-8">
+    <h2 class="text-3xl font-semibold mb-4">Refund Approval</h2>
+
+    <div class="bg-white p-6 rounded-md shadow-md">
+        <p class="mb-4">
+            Refund #{{ refund.id }} - Status: {{ refund.approved }}
+        </p>
+
+        <form method="post" action="{% url 'approve_return' refund.id %}" class="flex space-x-4">
+            {% csrf_token %}
+            <input type="hidden" name="refund_id" value="{{ refund.id }}">
+            <button type="submit" name="action" value="accept" class="px-4 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-700">Accept</button>
+            <button type="submit" name="action" value="deny" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700">Deny</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

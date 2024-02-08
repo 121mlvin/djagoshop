@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>{% block title %}{% endblock %} | MyShop</title>
+</head>
+
+<body>
+    <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
+    <a href="/" class="text-xl font-semibold">MyShop</a>
+
+    <div class="space-x-6">
+        {% if request.user.is_authenticated %}
+            {% if request.user.is_superuser %}
+                <div class="flex items-center">
+                    <a href="{% url 'add_product' %}" class="px-4 py-2 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Add Product</a>
+                    <a href="{% url 'view_returns' %}" class="px-4 py-2 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">View Refunds</a>
+                </div>
+            {% endif %}
+            <a href="{% url 'purchased_items' %}" class="px-4 py-2 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">My History</a>
+            <a href="{% url 'account_logout' %}" class="px-6 py-3 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700">Log out</a>
+            <span class="text-lg font-semibold">Wallet: ${{ request.user.wallet }}</span>
+        {% else %}
+            <a href="{% url 'account_signup' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Sign up</a>
+            <a href="{% url 'account_login' %}" class="px-6 py-3 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700">Log in</a>
+        {% endif %}
+    </div>
+</nav>
+
+    <div class="px-6 py-6">
+        {% block content %}
+            <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+                <h2 class="mb-12 text-2xl text-center">Newest items</h2>
+
+                <div class="grid grid-cols-3 gap-3">
+                    {% for i in items %}
+                        <div class="product-item">
+                            <h3>{{ i.name }}</h3>
+                            <p>{{ i.description }}</p>
+                            <p>Price: ${{ i.price }}</p>
+                            <p>Quantity available: {{ i.quantity_available }}</p>
+                            {% if i.image %}
+                                <img src="{{ i.image.url }}" alt="{{ i.name }}" width="100" height="100">
+                            {% endif %}
+                            {% if request.user.is_authenticated %}
+                            <a href="{% url 'product_detail' i.id %}">Purchase</a>
+                            {% endif %}
+                            {% if request.user.is_authenticated and request.user.is_superuser %}
+                <a href="{% url 'edit_product' i.id %}" class="text-teal-500 hover:text-teal-700 ml-2">Edit Product</a>
+            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mt-6 text-center">
+                    <a href="{% url 'product_list' %}" class="text-lg text-teal-500 hover:text-teal-700">Show More</a>
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+
+    <footer class="py-6 px-6 flex justify-between bg-gray-800">
+        <div class="w-2/3 pr-10">
+            <h3 class="mb-5 font-semibold text-gray-400">About</h3>
+            <p class="text-lg text-gray-500">My shop bla blablablalbbla bla bla.</p>
+        </div>
+
+        <div class="w-1/3">
+            <h3 class="mb-5 font-semibold text-gray-400">Menu</h3>
+            <ul class="space-y-2">
+                <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">About</a></li>
+                <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Contact</a></li>
+                <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Privacy policy</a></li>
+                <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Term of use</a></li>
+            </ul>
+        </div>
+    </footer>
+</body>
+</html>

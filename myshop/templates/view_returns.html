@@ -1,0 +1,22 @@
+{% extends 'main_page.html' %}
+
+{% block content %}
+
+<div class="container mx-auto mt-8">
+    <h2 class="text-3xl font-semibold mb-4">All Refund Requests</h2>
+
+    <ul class="divide-y divide-gray-200">
+        {% for refund in return_requests %}
+            <li class="flex justify-between items-center py-4">
+                <span class="text-lg">Refund #{{ refund.id }} - Status: {{ refund.approved }}</span>
+                <form method="post" action="{% url 'approve_return' refund.id %}" class="ml-auto">
+                    {% csrf_token %}
+                    <input type="hidden" name="refund_id" value="{{ refund.id }}">
+                    <button type="submit" class="px-4 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-700">Process Refund</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

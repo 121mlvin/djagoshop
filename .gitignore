@@ -1,0 +1,15 @@
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+.env
+venv/
+env/
+.idea/
+.DS_Store
+Thumbs.db
+.coverage
+.tox/
+.eggs/
