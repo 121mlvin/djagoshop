@@ -1,1 +1,1 @@
-# djagoshop
+# djangoshop
